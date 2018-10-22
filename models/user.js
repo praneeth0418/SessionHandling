@@ -14,6 +14,12 @@ var UserSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  sessionid: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true
+  },
   password: {
     type: String,
     required: true,
@@ -25,7 +31,8 @@ var UserSchema = new mongoose.Schema({
 });
 
 //authenticate input against database
-UserSchema.statics.authenticate = function (email, password, callback) {
+UserSchema.statics.authenticate = function (email, password, callback) 
+{
   User.findOne({ email: email })
     .exec(function (err, user) {
       if (err) {
@@ -35,7 +42,8 @@ UserSchema.statics.authenticate = function (email, password, callback) {
         err.status = 401;
         return callback(err);
       }
-      bcrypt.compare(password, user.password, function (err, result) {
+      bcrypt.compare(password, user.password, function (err, result) 
+	  {
         if (result === true) {
           return callback(null, user);
         } else {

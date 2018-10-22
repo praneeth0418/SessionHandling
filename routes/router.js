@@ -31,6 +31,7 @@ router.post('/', function (req, res, next)
 	{
       email: req.body.email,
       username: req.body.username,
+	  sessionid:req.sessionID,
       password: req.body.password,
       passwordConf: req.body.passwordConf,
     }
@@ -87,7 +88,7 @@ router.get('/profile', function (req, res, next)
           return next(err);
         } else 
 		{
-          return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<br><a type="button" href="/logout">Logout</a>')
+          return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<br><h1>your sessionid is:</h1>'+user.sessionid+'<br><a type="button" href="/logout">Logout</a>')
         }
       }
     });
