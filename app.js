@@ -1,12 +1,17 @@
 var express = require('express');
 var app = express();
+var device = require('express-device');
+app.use(device.capture());
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
 //connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/interview');//here interview is my database name
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost:27017/interview', {
+  useMongoClient: true
+});//here interview is my database name
 var db = mongoose.connection;
 
 //error handling while connecting todb

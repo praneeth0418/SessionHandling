@@ -20,6 +20,11 @@ var UserSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  device: {
+    type: String,
+    required: true,
+    trim: true
+  },
   password: {
     type: String,
     required: true,
@@ -30,10 +35,14 @@ var UserSchema = new mongoose.Schema({
   }
 });
 
+
+
 //authenticate input against database
-UserSchema.statics.authenticate = function (email, password, callback) 
+UserSchema.statics.authenticate = function (username, password, callback) 
 {
-  User.findOne({ email: email })
+  User.findOne(
+   (username.indexOf('@') === -1) ? {username: username} : {email: username}
+)
     .exec(function (err, user) {
       if (err) {
         return callback(err)
@@ -52,6 +61,9 @@ UserSchema.statics.authenticate = function (email, password, callback)
       })
     });
 }
+
+
+
 
 //hashing a password before saving it to the database
 UserSchema.pre('save', function (next) {

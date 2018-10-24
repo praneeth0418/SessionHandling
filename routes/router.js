@@ -1,6 +1,12 @@
 var express = require('express');
 var router = express.Router();
+var app = express();
 var User = require('../models/user');
+var device = require('express-device');
+app.use(device.capture());
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var Session = mongoose.model('Session', new Schema(), 'sessions');
 
 
 router.get('/', function (req, res, next)
@@ -32,6 +38,7 @@ router.post('/', function (req, res, next)
       email: req.body.email,
       username: req.body.username,
 	  sessionid:req.sessionID,
+	  device:req.device.type,
       password: req.body.password,
       passwordConf: req.body.passwordConf,
     }
@@ -46,9 +53,9 @@ router.post('/', function (req, res, next)
       }
     });
 
-  } else if (req.body.logemail && req.body.logpassword) 
+  } else if (req.body.loginput && req.body.logpassword) 
   {
-    User.authenticate(req.body.logemail, req.body.logpassword, function (error, user)
+    User.authenticate(req.body.loginput, req.body.logpassword, function (error, user)
 	{
       if (error || !user) 
 	  {
@@ -61,7 +68,14 @@ router.post('/', function (req, res, next)
         return res.redirect('/profile');
       }
     });
-  } else 
+  } 
+  
+  
+  
+  
+  
+  
+  else 
   {
     var err = new Error('All fields required.');
     err.status = 400;
@@ -88,14 +102,15 @@ router.get('/profile', function (req, res, next)
           return next(err);
         } else 
 		{
-          return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<br><h1>your sessionid is:</h1>'+user.sessionid+'<br><a type="button" href="/logout">Logout</a>')
+          return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<h2>Device: </h2>' + user.device + '<br><h1>your sessionid is:</h1>'+user.sessionid+'<br><a type="button" href="/logout">Logout</a>')
         }
       }
     });
 });
 
-// GET for logout logout
-router.get('/logout', function (req, res, next) {
+// GET for logout
+router.get('/logout', function (req, res, next) 
+{
   if (req.session) {
     // delete session object
     req.session.destroy(function (err) {
