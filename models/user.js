@@ -35,7 +35,29 @@ var UserSchema = new mongoose.Schema({
   }
 });
 
-
+var sessionschema=new mongoose.Schema({
+	email: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true
+  },
+  username: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true
+  },
+  sessionid: {
+    type: String,
+    trim: true
+  },
+  userid: {
+    type: String,
+    trim: true
+  }
+}); 
+ 
 
 //authenticate input against database
 UserSchema.statics.authenticate = function (username, password, callback) 
@@ -62,9 +84,9 @@ UserSchema.statics.authenticate = function (username, password, callback)
     });
 }
 
-
-
-
+sessionschema.pre('save',function(next){
+var user1=this;
+});
 //hashing a password before saving it to the database
 UserSchema.pre('save', function (next) {
   var user = this;

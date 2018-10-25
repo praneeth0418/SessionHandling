@@ -9,6 +9,7 @@ var Schema = mongoose.Schema;
 var Session = mongoose.model('Session', new Schema(), 'sessions');
 
 
+
 router.get('/', function (req, res, next)
  {
   return res.sendFile(path.join(__dirname + '/frontend/index.html'));
@@ -48,7 +49,8 @@ router.post('/', function (req, res, next)
       if (error) {
         return next(error);
       } else {
-        req.session.userId = user._id;
+        //req.session.userId = user._id;
+		db.sessions.insert({userid:user._id});
         return res.redirect('/profile');
       }
     });
