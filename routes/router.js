@@ -49,8 +49,7 @@ router.post('/', function (req, res, next)
       if (error) {
         return next(error);
       } else {
-        //req.session.userId = user._id;
-		db.sessions.insert({userid:user._id});
+        req.session.userId = user._id;
         return res.redirect('/profile');
       }
     });

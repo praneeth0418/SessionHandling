@@ -4,7 +4,7 @@ var device = require('express-device');
 app.use(device.capture());
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-const session = require('express-session');
+var session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
 //connect to MongoDB
@@ -26,6 +26,7 @@ app.use(session({
   secret: 'sessioninterview',
   resave: true,
   saveUninitialized: false,
+  cookie:{},
   store: new MongoStore({
     mongooseConnection: db
   })

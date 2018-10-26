@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
+var db = mongoose.connection;
 
 var UserSchema = new mongoose.Schema({
   email: {
@@ -51,10 +52,6 @@ var sessionschema=new mongoose.Schema({
   sessionid: {
     type: String,
     trim: true
-  },
-  userid: {
-    type: String,
-    trim: true
   }
 }); 
  
@@ -77,6 +74,7 @@ UserSchema.statics.authenticate = function (username, password, callback)
 	  {
         if (result === true) {
           return callback(null, user);
+		  
         } else {
           return callback();
         }
@@ -84,9 +82,7 @@ UserSchema.statics.authenticate = function (username, password, callback)
     });
 }
 
-sessionschema.pre('save',function(next){
-var user1=this;
-});
+
 //hashing a password before saving it to the database
 UserSchema.pre('save', function (next) {
   var user = this;
@@ -100,6 +96,9 @@ UserSchema.pre('save', function (next) {
 });
 
 
+sessionschema.pre('save',function(next){
+var user1=this;
+});
 var User = mongoose.model('User', UserSchema);
 module.exports = User;
 
